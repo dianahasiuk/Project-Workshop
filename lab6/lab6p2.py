@@ -18,18 +18,13 @@ def get_json_output(command):
 def main():
     rg_name = "az104-rg6"
 
-    # Task 2 - Azure Load Balancer
-    # Frontend IP: az104-fe зі статичним публічним IP az104-lbpip
     run_command(f"az network public-ip create -g {rg_name} -n az104-lbpip --sku Standard --allocation-method Static")
     run_command(f"az network lb create -g {rg_name} -n az104-lb --sku Standard --public-ip-address az104-lbpip --frontend-ip-name az104-fe --backend-pool-name az104-be")
 
-    # Health probe: az104-hp, TCP, порт 80, інтервал 5 сек
     run_command(f"az network lb probe create -g {rg_name} --lb-name az104-lb -n az104-hp --protocol tcp --port 80 --interval 5")
 
-    # Правило балансування: az104-lbrule, TCP 80→80, без session persistence
     run_command(f"az network lb rule create -g {rg_name} --lb-name az104-lb -n az104-lbrule --protocol tcp --frontend-port 80 --backend-port 80 --frontend-ip-name az104-fe --backend-pool-name az104-be --probe-name az104-hp --disable-outbound-snat true")
 
-    # Додавання vm0 та vm1 до backend pool az104-be
     for vm in ["az104-06-vm0", "az104-06-vm1"]:
         vm_info = get_json_output(f"az vm show -g {rg_name} -n {vm}")
         if vm_info and 'networkProfile' in vm_info:
