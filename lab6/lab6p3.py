@@ -25,7 +25,6 @@ def main():
         print("Помилка: Неможливо отримати IP-адреси віртуальних машин.")
         sys.exit(1)
 
-    # Task 3 - Application Gateway
     subprocess.run(
         f"az network public-ip create -g {rg_name} -n {pip_name} --sku Standard --allocation-method Static",
         shell=True, capture_output=True
@@ -39,11 +38,9 @@ def main():
     )
     subprocess.run(appgw_cmd, shell=True, capture_output=True)
 
-    # Backend pools: pool-image → vm0 (зображення), pool-video → vm1 (відео)
     subprocess.run(f"az network application-gateway address-pool create -g {rg_name} --gateway-name {appgw_name} -n pool-image --servers {ip_vm0}", shell=True)
     subprocess.run(f"az network application-gateway address-pool create -g {rg_name} --gateway-name {appgw_name} -n pool-video --servers {ip_vm1}", shell=True)
 
-    # Path-based routing: /image/* → pool-image, /video/* → pool-video
     subprocess.run(
         f"az network application-gateway url-path-map create -g {rg_name} --gateway-name {appgw_name} "
         f"-n url-map --paths /image/* --address-pool pool-image "
