@@ -82,7 +82,7 @@ def main():
     if not sub_id:
         return
 
-    # Завдання 1-3: Створення resource group
+   
     rg_url = (
         f"https://management.azure.com/subscriptions/{sub_id}"
         f"/resourcegroups/{RG_NAME}?api-version=2021-04-01"
@@ -93,19 +93,19 @@ def main():
         return
     print(f"[OK] Resource group '{RG_NAME}' готова")
 
-    # Завдання 1: az104-disk1 (Standard HDD, 32 GiB) — базове розгортання
+   
     deploy_disk_via_template(sub_id, headers, "az104-disk1")
 
-    # Завдання 2: az104-disk2 — повторне розгортання через редагований шаблон
+   
     deploy_disk_via_template(sub_id, headers, "az104-disk2")
 
-    # Завдання 3: az104-disk3 — розгортання через PowerShell (Cloud Shell)
+    
     deploy_disk_via_template(sub_id, headers, "az104-disk3")
 
-    # Завдання 4: az104-disk4 — розгортання через CLI (Bash)
+   
     deploy_disk_via_template(sub_id, headers, "az104-disk4")
 
-    # Завдання 5: az104-disk5 — розгортання через Bicep (StandardSSD)
+   
     deploy_disk_via_template(sub_id, headers, "az104-disk5", sku_name="StandardSSD_LRS")
 
 if __name__ == "__main__":
