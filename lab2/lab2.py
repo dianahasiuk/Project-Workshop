@@ -16,7 +16,7 @@ def run_az_command(cmd, return_json=True):
             return result.stdout.strip()
     return result.stdout.strip()
 
-# --- Створення групи helpdesk ---
+
 new_group = run_az_command([
     "az", "ad", "group", "create",
     "--display-name", "helpdesk",
@@ -25,10 +25,9 @@ new_group = run_az_command([
 ])
 group_id = new_group["id"]
 
-# Пауза для реплікації Entra ID
+
 time.sleep(30)
 
-# --- Завдання 1: Створення групи управління ---
 mg_name = "az104-mg1"
 mg_scope = f"/providers/Microsoft.Management/managementGroups/{mg_name}"
 
@@ -38,7 +37,7 @@ run_az_command([
     "--display-name", mg_name
 ], return_json=False)
 
-# --- Завдання 2: Призначення вбудованої ролі групі helpdesk ---
+
 run_az_command([
     "az", "role", "assignment", "create",
     "--assignee-object-id", group_id,
@@ -47,7 +46,7 @@ run_az_command([
     "--scope", mg_scope
 ], return_json=False)
 
-# --- Завдання 3: Створення власної RBAC-ролі ---
+
 custom_role_def = {
     "Name": "Custom Support Request",
     "IsCustom": True,
